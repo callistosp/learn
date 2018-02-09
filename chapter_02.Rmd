@@ -1,0 +1,120 @@
+
+---
+title: Introduction to mrgsolve
+author: Kyle T. Baron
+date: Metrum Research Group, LLC
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    css: styles/htmlstyles.css
+---
+
+
+
+```{r, include = FALSE}
+library(mrgsolve)
+library(dplyr)
+library(knitr)
+library(lattice)
+opts_chunk$set(comment = '.', fig.height = 5, fig.width = 9)
+```
+
+
+```{r, echo = FALSE, message = FALSE}
+mod <- mread_cache("popex", modlib()) %>% 
+  update(end = 72, delta = 0.2) %>% Req(CP = DV)
+data(exidata)
+data <- filter(exidata, ID <=10)
+set.seed(1222)
+```
+
+# Simulation output gallery
+
+
+What's going on here?
+
+```{r, echo = FALSE}
+mod %>% ev(amt = 100) %>% 
+  zero_re %>%
+  mrgsim %>% plot
+```
+
+What's different now?
+
+```{r, echo = FALSE}
+mod %>% ev(amt = 100, ii = 24, addl = 3) %>% 
+  zero_re %>%
+  mrgsim(end = 180) %>% plot
+```
+
+What's different now?
+
+```{r, echo = FALSE}
+
+idata <- data_frame(ID = 1:10)
+mod %>% ev(amt = 100, ii = 24, addl = 3) %>% 
+  idata_set(idata) %>%
+  mrgsim(end = 180) %>% plot
+```
+
+What's different now?
+
+```{r, echo = FALSE}
+out <- 
+mod %>% ev(amt = 100, ii = 24, addl = 3) %>%
+  zero_re %>% update(end = 180) %>%
+  mrgsolvetk:::sens_spaced(
+    TVV = c(14,34), .n = 5
+  )
+
+xyplot(CP~time, groups = ID, data = out, type = 'l', lwd = 2)
+```
+
+
+```{r, echo = FALSE, message = FALSE}
+hiv_dir <- "~/git/metrumresearchgroup/devmodels/hiv/"
+hiv <- mread_cache("hiv", project = hiv_dir)
+
+hiv %>% 
+  idata_set(expand.idata(N = c(1000, 1200, 1400))) %>%
+  mrgsim(end = 365*10) %>%
+  plot((TAR) ~ time/356, scales = list(y = list(log10 = TRUE)), 
+       ylab = "Uninfected CD4+ Cells", xlab = "Time (year)")
+```
+
+
+# Simple simulation
+
+```{r, echo = FALSE, message = FALSE}
+mod <- mread_cache("popex", modlib())
+```
+
+
+```{r}
+mod %>% ev(amt = 100) %>% mrgsim()
+```
+
+
+## model + intervention = output
+
+```{r, eval = FALSE}
+mod %>% ev(amt = 100) %>% mrgsim()
+```
+
+- A model object <alrt>mod</alrt>
+    - Everything pertaining to the __model__ that we need to know about to 
+    simulate
+- An intervention <alrt>ev(...)</alrt>
+- Simple, easy to implement
+    - Build up into more complicated structures
+    - See also: `data_set`
+- A call to <alrt>mrgsim()</alrt>
+    - This actually carries out the simulation
+
+<div class = spacer></div>
+
+After the spacer
+
+

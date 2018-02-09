@@ -1,0 +1,151 @@
+
+---
+title: Introduction to <grn>mrgsolve</grn> part 2
+author: Kyle T. Baron
+date: Metrum Research Group, LLC
+output: 
+  slidy_presentation:
+    number_sections: true
+    css: [styles/slidystyles.css,styles/colors.css]
+  html_document:
+    theme: united
+    number_sections: true
+    toc: true
+    css: [styles/htmlstyles.css,styles/colors.css]
+
+---
+
+
+
+```{r, include = FALSE}
+library(mrgsolve)
+library(dplyr)
+library(knitr)
+library(lattice)
+opts_chunk$set(comment = '.', fig.height = 5, fig.width = 9)
+```
+
+```{r setup, echo = FALSE, message = FALSE}
+mod <- mread_cache("pk1", modlib()) %>% 
+  update(end = 192, delta = 0.2) %>% Req(CP)
+data(exidata)
+data <- filter(exidata, ID <=10)
+set.seed(1222)
+```
+
+```{r, echo = FALSE}
+pop <- exidata
+.out <- 
+  mod %>% 
+  ev(amt = 100, ii = 24, addl = 3) %>% 
+  idata_set(pop, ID <=10) %>%
+  mrgsim()
+```
+
+# Add a population element to the simulation
+
+
+- <red>model</red> `%>%` <blu>intervention</blu> `%>%` <grn>Go!</grn> `%>%`  <purp>take-a-look</purp> 
+
+> - `model %>% intervention %>%` <orng>population</orng> `%>% Go! %>% take-a-look`
+
+
+# One population simulation with mrgsolve
+
+<pre>
+mod %>% 
+  ev(amt = 100, ii = 24, addl = 3) %>% 
+  <grn>idata_set(</grn><red>pop</red><grn>)</grn> %>%
+  mrgsim() %>% plot()
+</pre>
+
+```{r, echo = FALSE}
+plot(.out)
+```
+
+# `idata_set` takes in individual-level data
+
+- ID  - one per row
+- Typically parameters in columns
+
+```{r}
+head(pop, n = 3)
+
+length(unique(pop$ID))
+```
+
+- This tells mrgsolve to simulate `r length(unique(pop$ID))` units or individuals
+
+# <red>pop</red> and <purp>mod</purp> are connected via <blu>parameters</blu>
+
+```{r}
+head(pop, n = 3)
+```
+
+```{r}
+param(mod)
+```
+
+# What else can we do with `idata`?
+
+Batches of simulations or sensitivity analyses
+
+```{r}
+idata <- expand.idata(CL = seq(0.5, 1.5, 0.25))
+idata
+```
+
+
+# Note: this is the <grn>event</grn> `+` <blu>idata_set</blu> configuration
+
+
+```{r}
+mod %>% 
+  idata_set(idata) %>% 
+  ev(amt = 100, ii = 24, addl = 2) %>% 
+  mrgsim(end = 120) %>% plot(log(CP) ~ .)
+```
+
+
+# `data_set` is the dosing equivalent to `idata_set`
+
+
+```{r}
+data <- expand.ev(amt = c(100, 300, 1000), ii = 24, addl = 3)
+
+head(data)
+```
+
+# Note: this is `data_set` configuration
+
+```{r}
+mod %>% 
+  data_set(data) %>% 
+  mrgsim(end = 120) %>% plot(log(CP) ~ .)
+```
+
+
+
+# <grn>data_set</grn> will be most useful
+
+```{r}
+data <- expand.ev(amt = c(100,300,1000), 
+                  ii = 24, addl = 3, 
+                  CL = seq(0.5,1.5, 0.5)) 
+
+head(data)
+```
+
+---
+```{r}
+data <- mutate(data, dose = amt)
+
+mod %>% 
+  data_set(data) %>% 
+  mrgsim(carry.out = "dose", end = 120) %>% 
+  plot(log(CP)~time|factor(dose), group = ID, scales = "same")
+```
+
+
+
+

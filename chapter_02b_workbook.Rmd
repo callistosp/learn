@@ -1,0 +1,198 @@
+---
+title: "Vignette Title"
+output:
+  github_document: 
+    toc: true
+---
+
+```{r, global, echo = FALSE, message = FALSE, warning = FALSE}
+library(mrgsolve)
+library(tidyverse)
+```
+
+# Problems
+
+## Warm-up 
+
+Choose a `PKPD` model from the internal model library (`?modlib_pkpd`)
+to explore
+
+- Check the parameter values (`param`)
+- Check the compartments and initial values (`init`)
+- Review the model code (`see)
+
+```{r, warm_up_example, eval = FALSE}
+mod <- mread_cache("", modlib())
+```
+
+Extra credit: can you match up the output what what is going 
+on in the code?
+
+```{r, eval = FALSE}
+mod %>% mrgsim()
+```
+
+## Meropenem PK
+
+- Load the `meropenem` model from the model directory
+- Simulate the following scenarios:
+    - 100 mg IV bolus q8h x 3
+    - 100 mg IV over 3 hours q8h x3
+    
+Look at the `CP` output
+
+```{r}
+
+```
+
+
+## Z-Pak
+
+You've been sick for the last two weeks and can't take it any more. Finally, 
+you decide to go to the doctor, who gives you a diagnosis of 
+walking pneumonia. When you get home with your azithromycin 
+prescription, you start wondering about the directions: take 
+500 mg as a single dose on Day 1, followed by 250 mg once daily 
+on Days 2 through 5.
+
+Explore this regimen using the following model:
+
+- Model name: `azithro`
+- Model location: `model`
+
+Simulate out to at least day 14 to see what is happening.
+
+```{r, z_pak_example, eval = FALSE}
+mod <- mread("", "") %>% zero_re
+
+```
+
+## Output
+
+Run the following code and check the output
+
+```{r, eval = FALSE}
+mod <- mread_cache("azithro", "model")
+
+out <- 
+  mod %>% 
+  ev(amt = 500) %>%
+  mrgsim(end = 24, delta = 4)
+
+
+out
+
+class(out)
+
+head(out)
+
+out$CP
+
+as.data.frame(out)
+
+as_data_frame(out)
+
+filter(out, time==12)
+
+mutate(out, success = TRUE) %>% class
+
+```
+
+
+
+# Answers
+
+## Warm-up
+
+```{r, warm_up_answer}
+mod <- mread_cache("irm4", modlib())
+
+param(mod)
+
+init(mod)
+
+see(mod)
+```
+
+```{r, eval = FALSE}
+mod %>% mrgsim()
+```
+
+## Meropenem PK
+
+```{r}
+mod <- mread_cache("meropenem", "model")
+
+mod %>% 
+  ev(amt = 100, ii = 8, addl = 2) %>% 
+  mrgsim() %>%
+  plot
+```
+
+```{r}
+mod <- mread_cache("meropenem", "model")
+
+mod %>% 
+  ev(amt = 100, ii = 8, rate = 100/3, addl = 2) %>% 
+  mrgsim() %>%
+  plot
+```
+
+
+
+## Z-Pak
+```{r, z_pak_answer}
+mod <- mread("azithro", "model") %>% zero_re
+
+param(mod)
+
+param(mod)$TVV1 + param(mod)$TVV2
+
+```
+
+Set up an dosing event
+```{r}
+load <- ev(amt = 500, ii = 24,  addl = 0)
+maint <- ev(amt = 250, ii = 24, addl = 3)
+dose <- seq(load, maint)
+
+mod %>% 
+  ev(dose) %>%
+  mrgsim (end = 24*21) %>% 
+  plot(CP + PER2 + PER3 ~time/24)
+```
+
+
+## Output
+
+
+```{r}
+mod <- mread_cache("azithro", "model")
+
+out <- 
+  mod %>% 
+  ev(amt = 500) %>%
+  mrgsim(end = 24, delta = 4)
+
+out
+
+class(out)
+
+head(out)
+
+out$CP
+
+as.data.frame(out)
+
+as_data_frame(out)
+
+filter(out, time==12)
+
+mutate(out, success = TRUE) %>% class
+
+```
+
+
+
+
+

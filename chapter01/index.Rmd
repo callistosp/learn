@@ -1,12 +1,16 @@
 ---
 title: "Get Started Using mrgsolve"
-output: learnr::tutorial
+author: "<a href=http://www.metrumrg.com>Metrum Research Group</a>"
+date: "`r Sys.Date()`"
+output: 
+  learnr::tutorial:
+    theme: journal
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 library(learnr)
-knitr::opts_chunk$set(echo = TRUE,comment='.')
+knitr::opts_chunk$set(echo = TRUE,comment='.', message=FALSE)
 library(mrgsolve)
 req <- shiny::req
 ```
@@ -110,7 +114,7 @@ Example `$CMT`
 $CMT GUT CENT
 ```
 
-Example `$CMT`
+Example `$INIT`
 ```{c,eval=FALSE,echo=TRUE}
 $INIT GUT = 0, CENT = 10
 ```
@@ -177,7 +181,7 @@ on your "inline" model.  And we do it frequently in this tutorial
 because it makes things easier to follow.  
 
 
-### `mread_cache() and `mcode_cache()`
+### `mread_cache()` and `mcode_cache()`
  
 * Wrappers around `mread()` and `mcode()`
 * Model is cached; unless invalidated, won't need to recompile next time
@@ -289,7 +293,7 @@ amount, infusion rate and the compartment where the dose is to be administered.
 
 ### What to include in `ev`
 
-- `ID` subject ID (you can use multiple ids ... `ID=1:10`
+- `ID` subject ID (you can use multiple ids ... `ID=1:10`)
 - `time` the time when the event is supposed to happen
 - `cmt` the event compartment (usually where is the dose administered)
 - `amt` the dose amount
@@ -393,13 +397,13 @@ except for their column names.
 ### Rules for `data_set`
 
 * An `R` `data.frame`
-* Columns in \blkb{any} order
+* Columns in __any__ order
 * All __numeric__; `character`, `factor`, `logical` are dropped with warning
 * No missing values except in unused columns
 * Required: `ID`,`time`,`cmt`
 * __Either__ upper __or__ lower case:
-   * `time`,`amt`,`cmt`,`ii`,`addl`,`rate`,`ss`
-   * `TIME`, `AMT`, `CMT`, `II`, `ADDL`, `RATE`, `SS`
+     * `time`,`amt`,`cmt`,`ii`,`addl`,`rate`,`ss`
+     * `TIME`, `AMT`, `CMT`, `II`, `ADDL`, `RATE`, `SS`
 * Columns with same name as `$PARAM` will be used to update during simulation
 
 
