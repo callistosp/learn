@@ -141,7 +141,7 @@ Kyle T. Baron
 -------- mrgsolve model object (unix) --------
   Project: /Users/kyleb/Rli...gsolve/models
   source:        popex.cpp
-  shared object: popex-so-12aaf49e6b535 
+  shared object: popex-so-12be021dd881 
 
   Time:          start: 0 end: 192 delta: 0.2
   &gt;              add: &lt;none&gt;
@@ -239,7 +239,7 @@ mod</code></pre></div>
 . -------- mrgsolve model object (unix) --------
 .   Project: /Users/kyleb/Rli...gsolve/models
 .   source:        effect.cpp
-.   shared object: effect-so-12aaf7c960691 
+.   shared object: effect-so-12be04c251c45 
 . 
 .   Time:          start: 0 end: 36 delta: 0.1
 .   &gt;              add: &lt;none&gt;
@@ -553,6 +553,10 @@ e2 &lt;-<span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt
 <div id="what-else-can-i-update" class="slide section level1">
 <h1>What else can I update?</h1>
 <ul>
+<li>Time
+<ul>
+<li><code>start</code>, <code>end</code>, <code>delta</code>, <code>add</code></li>
+</ul></li>
 <li>Solver settings
 <ul>
 <li><code>atol</code>, <code>rtol</code></li>
@@ -564,6 +568,10 @@ e2 &lt;-<span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">update</span>(<span class="dt">rtol =</span> <span class="fl">1E-12</span>) <span class="op">%&gt;%</span><span class="st"> </span>...</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mrgsim</span>(<span class="dt">rtol =</span> <span class="fl">1E-12</span>) <span class="op">%&gt;%</span><span class="st"> </span>...</code></pre></div>
+</div>
+<div id="next-slide-deck" class="slide section level1">
+<h1>Next slide deck</h1>
+<p><a href="deck_02.html">Data Sets</a></p>
 </div>
 
   <!-- dynamically load mathjax for compatibility with self-contained -->

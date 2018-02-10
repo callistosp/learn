@@ -510,7 +510,8 @@ mod %>% mrgsim(end = 72)
 
 
 # What else can I update?
-
+* Time
+    - `start`, `end`, `delta`, `add`
 * Solver settings
     * `atol`, `rtol`
     * `hmax`, `maxsteps`, `mxhnil`, `ixpr`
@@ -525,6 +526,10 @@ mod %>% update(rtol = 1E-12) %>% ...
 ```{r, eval = FALSE}
 mod %>% mrgsim(rtol = 1E-12) %>% ...
 ```
+
+# Next slide deck
+
+[Data Sets](deck_02.html)
 
 
 
