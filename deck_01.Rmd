@@ -1,6 +1,6 @@
 
 ---
-title: Introduction to <grn>mrgsolve</grn> part 1
+title: "Introduction to <grn>mrgsolve</grn><BR>Models and Events"
 author: Kyle T. Baron
 date: Metrum Research Group, LLC
 output: 
@@ -22,7 +22,7 @@ library(dplyr)
 library(knitr)
 library(lattice)
 opts_chunk$set(comment = '.', fig.height = 5, fig.width = 9)
-tryit_file <- "chapter_02_workbook.Rmd"
+tryit_file <- "deck_01_workbook.Rmd"
 ```
 
 ```{r setup, echo = FALSE, message = FALSE}

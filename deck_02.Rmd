@@ -1,6 +1,6 @@
 
 ---
-title: Introduction to <grn>mrgsolve</grn> part 2
+title: Introduction to <grn>mrgsolve</grn><BR>Data Sets
 author: Kyle T. Baron
 date: Metrum Research Group, LLC
 output: 

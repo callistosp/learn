@@ -1,0 +1,34 @@
+
+---
+title: ""
+author: ""
+date: ""
+output: 
+  slidy_presentation:
+    number_sections: true
+    css: [styles/slidystyles.css,styles/colors.css]
+  html_document:
+    theme: united
+    number_sections: true
+    toc: true
+    css: [styles/htmlstyles.css,styles/colors.css]
+
+---
+
+
+
+```{r, include = FALSE}
+library(mrgsolve)
+library(dplyr)
+library(knitr)
+library(lattice)
+opts_chunk$set(comment = '.', fig.height = 5, fig.width = 9)
+```
+
+---
+
+<h1>Introduction to <grn>mrgsolve</grn></h1>
+
+- [Models and Events](deck_01.html)
+- [Data Sets](deck_02.html)
+
