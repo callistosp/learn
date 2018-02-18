@@ -26,8 +26,8 @@ tryit_file <- "deck_01_workbook.Rmd"
 ```
 
 ```{r setup, echo = FALSE, message = FALSE}
-mod <- mread_cache("popex", modlib()) %>% 
-  update(end = 192, delta = 0.2) %>% Req(CP = DV)
+mod <- mread_cache("pk1", modlib()) %>% 
+  update(end = 192, delta = 0.2) %>% Req(CP)
 data(exidata)
 data <- filter(exidata, ID <=10)
 set.seed(1222)
@@ -56,7 +56,7 @@ mod %>% ev(amt = 100, ii = 24, addl = 3) %>% mrgsim() %>% plot()
 
 > - <red>model</red> `%>%` <blu>intervention</blu> `%>%` <grn>Go!</grn> `%>%` <orng>take-a-look</orng> 
 
-# Sneak preview 
+# What's coming ...
 
 > - `model %>% intervention %>%` <alrt>options</alrt> `%>% Go! %>% ...`
 
@@ -71,29 +71,41 @@ mod %>% ev(amt = 100, ii = 24, addl = 3) %>% mrgsim() %>% plot()
 > - <red>model</red> `%>%` <blu>intervention</blu> `%>%` <grn>Go!</grn> `%>%` <orng>take-a-look<orng> 
 
 
-# What's this thing? `%>%`
+# Why do we use `%>%` ?
 
-It's called a <grn>pipe</grn>.  It allows us to pass the output from one function 
-into another function ... creating a pipeline
+What happens first in this operation?
 
-```{r}
+```{r, eval = FALSE}
 mean(sqrt(seq(4)))
 ```
 
-```{r}
+# Pipelines
+
+```{r, eval = FALSE}
+mean(sqrt(seq(4)))
+```
+
+```{r, eval = FALSE}
 4  %>% seq() %>% sqrt() %>% mean()
 ```
 
 Better.
 
-```{r}
-4  %>% seq(.) %>% sqrt(.) %>% mean(., na.rm = TRUE)
+```{r, eval = FALSE}
+4  %>% 
+  seq(.) %>% 
+  sqrt(.) %>% 
+  mean(., na.rm = TRUE)
+```
+
+```{r,eval = FALSE}
+mod %>% some_intervention() %>% simulate() %>% post_process()
 ```
 
 
 # The model object
 
-<red>model</red> `%>% ... `
+<red>mod</red><blk>el</blk> `%>% ... `
 
 > - I (almost) always call the model object <red>mod</red> in the documention / examples
 
@@ -133,7 +145,7 @@ init(mod)
 
 # Where did <red>mod</red> come from?
 
-```{r}
+```{r,eval = FALSE}
 mod <- mread("simple", "model")
 ```
 
@@ -311,7 +323,10 @@ e2 <- ev(amt = 100, time = 24, ii = 24, addl = 4)
 c(e1, e2)
 ```
 
----
+# Create complex events - 1
+
+What's going to happen?
+
 ```{r, echo = FALSE}
 e1 <- ev(amt = 200) 
 e2 <- ev(amt = 100, time = 24, ii = 24, addl = 4)
@@ -347,6 +362,17 @@ e2 <- ev(amt = 100, ii = 24, addl = 4)
 seq(e1, e2)
 ```
 
+# Create complex events - 2
+
+What's going to happen?
+
+```{r, echo = FALSE}
+e1 <- ev(amt = 200, ii = 12, addl = 2) 
+e2 <- ev(amt = 100, ii = 24, addl = 4)
+e <- seq(e1, e2)
+mrgsim(mod, events = e, end = 180) %>% plot(CP ~ .)
+```
+
 
 # Create complex events - 2
 
@@ -359,6 +385,7 @@ e2 <- ev(amt = 100, ii = 24, addl = 4)
 
 seq(e1, e2)
 ```
+
 
 # Create complex events - 3
 
@@ -375,6 +402,17 @@ seq(e1, wait = 36, e2)
 # Create complex events - 3
 
 What is going to happen?
+
+```{r, echo = FALSE}
+e1 <- ev(amt = 200) 
+e2 <- ev(amt = 100, ii = 24, addl = 4)
+e <- seq(e1, wait = 36, e2)
+mrgsim(mod, events = e, end = 180) %>% plot(CP ~ .)
+```
+
+# Create complex events - 3
+
+Wait before starting the next part of the regimen
 
 ```{r}
 e1 <- ev(amt = 200) 
@@ -397,6 +435,12 @@ seq(e1, wait = 36, e2)
 ```{r}
 as.data.frame(e1)
 ```
+
+- We will use a <blk>data_set</blk> later on for populations
+
+- Event objects are convenient
+  - Constructor
+  - Operations
 
 # We're stil working on this setup
 
@@ -449,22 +493,26 @@ mrgsim(mod, events = e)
 # Plot
 
 ```{r}
-mod %>% ev(amt = 100) %>% mrgsim() %>% plot
+mod %>% ev(amt = 100) %>% mrgsim() %>% plot()
 ```
 
 # Plot
 
 ```{r}
-mod %>% ev(amt = 100) %>% mrgsim() %>% plot(CP~., col = "firebrick")
+mod %>% ev(amt = 100) %>% mrgsim() %>% 
+  plot(CP + EFFECT~., col = "firebrick")
 ```
 
-# Pipeline
+# Pipeline to dplyr functions
 
 ```{r}
 mod %>% mrgsim() %>% mutate(arm = 1)
 ```
 
 # What would you like to "fix" in this plot?
+```{r,echo= FALSE}
+mod <- update(mod, end = 18, delta = 6)
+```
 
 ```{r}
 mod %>% ev(amt = 100) %>% mrgsim() %>% plot(CP~time)
@@ -472,12 +520,12 @@ mod %>% ev(amt = 100) %>% mrgsim() %>% plot(CP~time)
 
 # Simulation end time
 ```{r}
-mod %>% ev(amt = 100) %>% mrgsim(end = 96) %>% plot(CP~time)
+mod %>% ev(amt = 100) %>% mrgsim(end = 48) %>% plot(CP~time)
 ```
 
 # Simulation time step
 ```{r}
-mod %>% ev(amt = 100) %>% mrgsim(end = 96, delta = 0.1) %>% plot(CP~time)
+mod %>% ev(amt = 100) %>% mrgsim(end = 48, delta = 0.1) %>% plot(CP~time)
 ```
 
 
@@ -495,15 +543,19 @@ stime(mod)
 ```
 # Update
 
-```{r, eval = FALSE}
-mod <- update(mod, end = 72)
-```
+On the fly
 
 ```{r, eval = FALSE}
 mod %>% update(end = 72) %>% mrgsim()
 ```
 
-`mrgsim` will call `update` for you
+Persistent 
+
+```{r, eval = FALSE}
+mod <- update(mod, end = 72)
+```
+
+mrgsim will call `update` for you (on the fly)
 ```{r, eval = FALSE}
 mod %>% mrgsim(end = 72)
 ```
@@ -526,6 +578,27 @@ mod %>% update(rtol = 1E-12) %>% ...
 ```{r, eval = FALSE}
 mod %>% mrgsim(rtol = 1E-12) %>% ...
 ```
+
+# Controlling output - <grn>request</grn>
+
+```{r}
+mod %>% mrgsim() %>% head(n = 2)
+```
+
+```{r}
+mod %>% Req(CP) %>% mrgsim() %>% head(n = 2)
+```
+
+
+# Controlling output - <grn>obsonly</grn>
+```{r}
+mod %>% ev(amt=1) %>% mrgsim() %>% head(n = 2)
+```
+
+```{r}
+mod %>% ev(amt=1) %>% obsonly() %>% mrgsim() %>% head(n = 2)
+```
+
 
 # Next slide deck
 

@@ -126,7 +126,7 @@ mod %>%
 
 
 
-# <grn>data_set</grn> will be most useful
+# <grn>data_set</grn> can also carry parameters
 
 ```{r}
 data <- expand.ev(amt = c(100,300,1000), 
@@ -147,5 +147,34 @@ mod %>%
 ```
 
 
+# <blk>carry_out</blk> or <blk>carry.out</blk>
+
+Copy from the input data to the output data
+
+```{r}
+mod %>% carry_out(dose) %>% data_set(data, dose==300) %>% mrgsim()
+```
+
+
+# What <grn>data_set</grn> and <blu>ev</blu>
+
+```{r}
+head(data, n = 3)
+```
+
+```{r}
+ev(amt = 100, ii = 24, addl = 3)
+```
+
+# We have now seen 3 simulation setups
+
+> - `mod + ev = ?`
+> - `mod + idata_set + ev = ?`
+> - `mod + data_set = ?`
+
+# Wait a minute ...
+```{r}
+head(data)
+```
 
 
