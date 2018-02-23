@@ -27,11 +27,11 @@ inline double antilogit(const double a) {
 #define CP  (CENT/(V2/1000))
 
 [THETA] @annotated
-0.19 : Typical value of clearance
-3.61 : Typical value of central volume
-0.39 : Typical value of intercomp clearance
-2.87 : Typical value of peripheral volume
-0.18 : Absorption rate constant <sc dosing>
+0.19 : Typical value of clearance (L/day)
+3.61 : Typical value of central volume (L)
+0.39 : Typical value of intercomp clearance (L/day)
+2.87 : Typical value of peripheral volume (L)
+0.18 : Absorption rate constant <sc dosing> (1/day)
 1.00 : Weight effect on CL
 0.81 : Weight effect on V2
 0.68 : Weight effect on Q
@@ -59,8 +59,8 @@ double GAM  = theta4;
 
 F_SC = antilogit(THETA10);
 
-double KIN = BASE*KOUT*exp(EBASE);
-RESP_0 = BASE*exp(EBASE);
+double KIN = BASE*KOUT;
+RESP_0 = BASE;
 
 [ODE]
 dxdt_SC     = -KA*SC;
@@ -79,11 +79,10 @@ dxdt_RESP   =  KIN - KOUT*(1.0+DE)*RESP;
 0.14 0.72 0.0324
 0 0 0 0.1225
 
+
 [OMEGA]
-@labels EKOUT EEC ESL EBASE
-0.5776 1 0.000196 0.2
-
-
+@labels EKOUT EEC ESL
+0.5776 1 0.000196
 
 [SIGMA] @labels PROP ADD 
 0.0289 137641
@@ -99,7 +98,7 @@ double PASI = RESP*(1.0+PDPROP)+PDADD;
 if(NEWIND <=1) {
   double base = PASI; 
 }
-double dPASI = PASI/base;
+double dPASI = PASI/BASE;
 
 [CAPTURE] @annotated
 IPRED : Individual predicted secuk concentration (mg/L)
