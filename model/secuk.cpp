@@ -97,8 +97,9 @@ double PASI = RESP*(1.0+PDPROP)+PDADD;
 
 if(NEWIND <=1) {
   double base = PASI; 
+  double ibase = RESP;
 }
-double dPASI = PASI/BASE;
+double dPASI = PASI/ibase;
 
 [CAPTURE] @annotated
 IPRED : Individual predicted secuk concentration (mg/L)

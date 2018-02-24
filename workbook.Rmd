@@ -5,7 +5,7 @@ output:
     toc: true
 ---
 
-```{r, global, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, setup, echo = FALSE, message = FALSE, warning = FALSE}
 library(mrgsolve)
 library(tidyverse)
 ```
@@ -95,6 +95,54 @@ as_data_frame(out)
 filter(out, time==12)
 
 mutate(out, success = TRUE) %>% class
+
+```
+
+## Dose response
+
+You are the pharmacometrician supporting secukinumab development for psoriasis, 
+and the team wants an update.  You start telling them about 
+this awesome indirect response model you developed for week-5 PASI scores. 
+It has log-normal IIV and combined additive / portional error model.  You got the
+covariance matrix and the condition number was low.  The pred-corrected VPC 
+and NPDE plots showed showed nothing to worry about. 
+
+As you wrap up your report, you notice the blank stares coming back from the 
+faces of your team members. 
+
+The clin pharm lead clears her throat: Um, we'd like to push the dose as high 
+as we can to get to PASI75 by week 5.  Can you tell us what dose that might
+be?
+
+- Use the `secukinumab` PK/PD model 
+- Generate a plot of PASI as fraction of baseline after 5 weekly
+doses between 0 and 150 mg
+
+
+```{r}
+mod <- mread_cache("secuk", "model") %>% zero_re()
+
+see(mod)
+
+out <- mod %>% ev(amt = 75, ii = 7, addl = 4) %>% mrgsim() 
+
+plot(out)
+
+tail(out)
+```
+
+
+## Statin/CsA DDI
+
+- Load the model `yoshikado`
+
+- Examine the the following drug-drug interaction
+  - pitavastatin 30 mg x1
+  - cyclosporine 2000 mg x1; wait 1 hr; then pitavastatin 30 mg x1
+- What parameters is the pitavastatin profile sensitive to?
+
+
+```{r}
 
 ```
 
@@ -192,6 +240,32 @@ mutate(out, success = TRUE) %>% class
 
 ```
 
+## Statin/CsA DDI
+
+```{r}
+mod <- mread_cache("yoshikado", "model", end = 14, delta = 0.1)
+
+e1 <- ev(amt = 2000, cmt  = 2)
+mod %>% ev(e) %>% mrgsim() %>% plot(CSA~.)
+
+e2 <- ev(amt = 30, time  = 1)
+mod %>% ev(e2) %>% mrgsim() %>% plot(CP~.)
+
+out1 <- mod %>% ev(e2) %>% mrgsim_df(delta = 0.1) %>% mutate(ddi = FALSE)
+out2 <- mod %>% ev(e1+e2) %>% mrgsim_df(delta = 0.1) %>% mutate(ddi = TRUE)
+
+out <- bind_rows(out1, out2)
+
+ggplot(out, aes(time, CP, col = ddi)) + geom_line(lwd = 1) + 
+  scale_y_continuous(trans = "log10", limits = c(0.1, 100), 
+                     breaks = 10^seq(-4,4)) + 
+  scale_color_brewer(palette = "Set1")
+
+
+out %>% group_by(ddi) %>% summarise(Cmax = max(CP))
+
+#out %>% group_by(ddi) %>% summarise(auc = PKPDmisc::auc_partial(time, CP))
+```
 
 
 
