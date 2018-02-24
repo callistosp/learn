@@ -198,7 +198,7 @@ expand.ev(ID = 1:2, amt = c(100,200))
 
 ```{r}
 e <- ev(amt = 100, ii = 12, addl = 14)
-ev_rep(e, ID = seq(5))
+ev_rep(e, id = seq(5))
 ```
 
 ```{r, eval = FALSE}
@@ -213,7 +213,7 @@ e <- seq(ev(amt = 100), wait = 36, ev(amt = 50, ii = 24, addl = 4))
 e
 ```
 ```{r}
-ev_rep(e, ID = seq(2))
+ev_rep(e, id = seq(2))
 ```
 
 
@@ -229,4 +229,42 @@ data <- as_data_set(
 ```{r, echo = FALSE}
 head(data, n = 10)
 ```
+
+
+# Updating parameters 1
+
+```{r}
+param(mod)
+```
+
+```{r, eval = FALSE}
+mod <- param(mod, V = 30)
+```
+```{r, eval = FALSE}
+mod %>% param(V = 30) %>% mrgsim()
+```
+
+
+# Updating parameters 2
+
+
+```{r}
+idata <- expand.idata(CL = seq(0.5, 1.5, 0.25))
+head(idata)
+
+```
+
+Put the second row into the parameters
+```{r, eval = FALSE}
+mod <- param(mod, slice(idata,2))
+```
+
+# Updating parameters 3
+
+The update here happens as the simulation progresses
+
+```{r, eval = FALSE}
+mod %>% idata_set(idata) %>% mrgsim()
+```
+
 

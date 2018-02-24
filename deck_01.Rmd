@@ -22,7 +22,7 @@ library(dplyr)
 library(knitr)
 library(lattice)
 opts_chunk$set(comment = '.', fig.height = 5, fig.width = 9)
-tryit_file <- "deck_01_workbook.Rmd"
+tryit_file <- "workbook.Rmd"
 ```
 
 ```{r setup, echo = FALSE, message = FALSE}
@@ -564,6 +564,7 @@ mod %>% mrgsim(end = 72)
 # What else can I update?
 * Time
     - `start`, `end`, `delta`, `add`
+* Parameters and compartment initial values
 * Solver settings
     * `atol`, `rtol`
     * `hmax`, `maxsteps`, `mxhnil`, `ixpr`

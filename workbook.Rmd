@@ -98,33 +98,36 @@ mutate(out, success = TRUE) %>% class
 
 ```
 
-## Dose response
+## Secukinumab for psoriasis
 
-You are the pharmacometrician supporting secukinumab development for psoriasis, 
+You are the pharmacometrician supporting secukinumab program for psoriasis, 
 and the team wants an update.  You start telling them about 
 this awesome indirect response model you developed for week-5 PASI scores. 
-It has log-normal IIV and combined additive / portional error model.  You got the
-covariance matrix and the condition number was low.  The pred-corrected VPC 
+It has log-normal IIV and combined additive / prortional error model.  Standard
+errors look good and the condition number was low.  The pred-corrected VPC 
 and NPDE plots showed showed nothing to worry about. 
 
 As you wrap up your report, you notice the blank stares coming back from the 
-faces of your team members. 
+faces of the team members. 
 
-The clin pharm lead clears her throat: Um, we'd like to push the dose as high 
-as we can to get to PASI75 by week 5.  Can you tell us what dose that might
-be?
+The clin pharm lead breaks the uncomfortable slience: We're looking at 
+a 100 mg dose in the 5 week induction period. We'd like to push the dose
+higher, but also worried about candida infection.  If we increase to 125
+mg or 150 mg, are we likely to see lower PASI scores?  How close are
+we to reaching the maximum effect for end of induction?
 
-- Use the `secukinumab` PK/PD model 
+- Use the `secukinumab` PK/PD model
+- Dose once weekly for 5 weeks
 - Generate a plot of PASI as fraction of baseline after 5 weekly
 doses between 0 and 150 mg
 
 
 ```{r}
-mod <- mread_cache("secuk", "model") %>% zero_re()
+mod <- mread_cache("secukinumab", "model") %>% zero_re()
 
 see(mod)
 
-out <- mod %>% ev(amt = 75, ii = 7, addl = 4) %>% mrgsim() 
+out <- mod %>% ev(amt = 25) %>% mrgsim(end = 35) 
 
 plot(out)
 
@@ -141,6 +144,18 @@ tail(out)
   - cyclosporine 2000 mg x1; wait 1 hr; then pitavastatin 30 mg x1
 - What parameters is the pitavastatin profile sensitive to?
 
+
+```{r}
+
+```
+
+
+## GCSF dosing
+
+- Simulate 2.5, 5, and 10 mcg/kg assuming 50, 70, 90 kg individual
+- Simulate 2.5, 5, and 10 mcg/kg assuming log(WT) ~ N(log(80),0.1)
+
+- Do daily SC dosing x 7d
 
 ```{r}
 

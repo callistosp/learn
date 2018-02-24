@@ -241,7 +241,7 @@ mod <span class="op">%&gt;%</span><span class="st"> </span>
 <div id="ev_rep" class="slide section level1">
 <h1><code>ev_rep</code></h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">e &lt;-<span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt =</span> <span class="dv">100</span>, <span class="dt">ii =</span> <span class="dv">12</span>, <span class="dt">addl =</span> <span class="dv">14</span>)
-<span class="kw">ev_rep</span>(e, <span class="dt">ID =</span> <span class="kw">seq</span>(<span class="dv">5</span>))</code></pre></div>
+<span class="kw">ev_rep</span>(e, <span class="dt">id =</span> <span class="kw">seq</span>(<span class="dv">5</span>))</code></pre></div>
 <pre><code>.   time cmt amt ii addl evid ID
 . 1    0   1 100 12   14    1  1
 . 2    0   1 100 12   14    1  2
@@ -258,7 +258,7 @@ e</code></pre></div>
 .   time cmt amt evid ii addl
 . 1    0   1 100    1  0    0
 . 2   36   1  50    1 24    4</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ev_rep</span>(e, <span class="dt">ID =</span> <span class="kw">seq</span>(<span class="dv">2</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ev_rep</span>(e, <span class="dt">id =</span> <span class="kw">seq</span>(<span class="dv">2</span>))</code></pre></div>
 <pre><code>.   time cmt amt evid ii addl ID
 . 1    0   1 100    1  0    0  1
 . 2   36   1  50    1 24    4  1
@@ -282,6 +282,35 @@ e</code></pre></div>
 . 7  7    0   1    1 150 24    9
 . 8  8    0   1    1 150 24    9
 . 9  9    0   1    1 150 24    9</code></pre>
+</div>
+<div id="updating-parameters-1" class="slide section level1">
+<h1>Updating parameters 1</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">param</span>(mod)</code></pre></div>
+<pre><code>. 
+.  Model parameters (N=3):
+.  name value . name value
+.  CL   1     | V    20   
+.  KA   1     | .    .</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod &lt;-<span class="st"> </span><span class="kw">param</span>(mod, <span class="dt">V =</span> <span class="dv">30</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">param</span>(<span class="dt">V =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mrgsim</span>()</code></pre></div>
+</div>
+<div id="updating-parameters-2" class="slide section level1">
+<h1>Updating parameters 2</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">idata &lt;-<span class="st"> </span><span class="kw">expand.idata</span>(<span class="dt">CL =</span> <span class="kw">seq</span>(<span class="fl">0.5</span>, <span class="fl">1.5</span>, <span class="fl">0.25</span>))
+<span class="kw">head</span>(idata)</code></pre></div>
+<pre><code>.   ID   CL
+. 1  1 0.50
+. 2  2 0.75
+. 3  3 1.00
+. 4  4 1.25
+. 5  5 1.50</code></pre>
+<p>Put the second row into the parameters</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod &lt;-<span class="st"> </span><span class="kw">param</span>(mod, <span class="kw">slice</span>(idata,<span class="dv">2</span>))</code></pre></div>
+</div>
+<div id="updating-parameters-3" class="slide section level1">
+<h1>Updating parameters 3</h1>
+<p>The update here happens as the simulation progresses</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">idata_set</span>(idata) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mrgsim</span>()</code></pre></div>
 </div>
 
   <!-- dynamically load mathjax for compatibility with self-contained -->

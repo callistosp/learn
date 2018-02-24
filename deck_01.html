@@ -146,7 +146,7 @@ Kyle T. Baron
 -------- mrgsolve model object (unix) --------
   Project: /Users/kyleb/Rli...gsolve/models
   source:        pk1.cpp
-  shared object: pk1-so-2a772f847a70 
+  shared object: pk1-so-e8f26bfb73a 
 
   Time:          start: 0 end: 192 delta: 0.2
   &gt;              add: &lt;none&gt;
@@ -243,7 +243,7 @@ mod</code></pre></div>
 . -------- mrgsolve model object (unix) --------
 .   Project: /Users/kyleb/Rli...gsolve/models
 .   source:        effect.cpp
-.   shared object: effect-so-2a7766392442 
+.   shared object: effect-so-e8f67600c19 
 . 
 .   Time:          start: 0 end: 36 delta: 0.1
 .   &gt;              add: &lt;none&gt;
@@ -274,7 +274,7 @@ mod</code></pre></div>
 <div id="your-turn" class="slide section level1">
 <h1><red>Your turn</red></h1>
 <ul>
-<li><p>File name: <grn>deck_01_workbook.Rmd</grn></p></li>
+<li><p>File name: <grn>workbook.Rmd</grn></p></li>
 <li><p>Section name: <blu>Warm Up</blu></p></li>
 </ul>
 </div>
@@ -417,7 +417,7 @@ e2 &lt;-<span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt
 <div id="your-turn-1" class="slide section level1">
 <h1><red>Your turn</red></h1>
 <ul>
-<li><p>File name: <grn>deck_01_workbook.Rmd</grn></p></li>
+<li><p>File name: <grn>workbook.Rmd</grn></p></li>
 <li><p>Section name: <blu>Z-Pak</blu></p></li>
 </ul>
 </div>
@@ -570,22 +570,22 @@ e2 &lt;-<span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt
 </div>
 <div id="controlling-output---request" class="slide section level1">
 <h1>Controlling output - <grn>request</grn></h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span>mrgsim <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mrgsim</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>.   ID time GUT CENT PERIPH CE EFFECT CP
 . 1  1    0   0    0      0  0    157  0
 . 2  1    6   0    0      0  0    157  0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">Req</span>(CP) <span class="op">%&gt;%</span><span class="st"> </span>mrgsim <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">Req</span>(CP) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mrgsim</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>.   ID time CP
 . 1  1    0  0
 . 2  1    6  0</code></pre>
 </div>
 <div id="controlling-output---obsonly" class="slide section level1">
 <h1>Controlling output - <grn>obsonly</grn></h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt=</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>mrgsim <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt=</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mrgsim</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>.   ID time GUT CENT PERIPH CE EFFECT CP
 . 1  1    0   0    0      0  0    157  0
 . 2  1    0   1    0      0  0    157  0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">obsonly</span>() <span class="op">%&gt;%</span><span class="st"> </span>mrgsim <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt=</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">obsonly</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mrgsim</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>.   ID time         GUT      CENT    PERIPH         CE   EFFECT         CP
 . 1  1    0 0.000000000 0.0000000 0.0000000 0.00000000 157.0000 0.00000000
 . 2  1    6 0.004005846 0.1069759 0.2436686 0.05481486 156.6724 0.04384256</code></pre>
