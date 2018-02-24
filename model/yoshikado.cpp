@@ -1,6 +1,8 @@
 [PROB]
 # Yoshikado et al. (2016)
 
+https://www.ncbi.nlm.nih.gov/pubmed/27170342
+
 - Title: __Quantitative Analyses of Hepatic OATP-Mediated
 Interactions Between Statins and Inhibitors Using PBPK
 Modeling With a Parameter Optimiaztion Method__

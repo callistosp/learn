@@ -1,4 +1,6 @@
 [PROB]
+https://www.ncbi.nlm.nih.gov/pubmed/20881223
+
 PKPD NEUPOGEN BASELINE(BAS) at 0.0246 ng/ml
 
 [SET] end=120, delta=0.1

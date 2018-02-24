@@ -1,43 +1,45 @@
 [PROB]
-http://repository.ddmore.foundation/model/DDMODEL00000213#Files
+Meropenem PopPK
 
-[SET] delta=0.1, end=36, req="CP"
+https://www.ncbi.nlm.nih.gov/pubmed/16988206
 
-[PKMODEL] cmt = "CENT PERIPH"
+[SET] delta=0.1, end=8, req=""
 
-[PARAM]
-WT = 70
-CLCR = 83
-AGE = 35
+[PKMODEL] cmt = "CENT, PERIPH"  
 
-[THETA]
- 1.50E+01  
- 1.27E+01  
- 1.52E+01  
- 1.24E+01 
--4.47E-01  
- 8.20E-01  
- 1.88E-01  
- 4.76E-01  
- 6.20E-01
+[PARAM] @annotated
+WT   : 70 : Weight (kg)
+CLCR : 83 : Creatinine clearance (ml/min)
+AGE  : 35 : Age (years)
+ 
+[THETA] @annotated
+ 1.50E+01 : Typical value of clearance (L/h)
+ 1.27E+01 : Typical value of volume 1 (L)
+ 1.52E+01 : Intercompartmental clearance (L/h) 
+ 1.24E+01 : Typical value of volume 2 (L) 
+-4.47E-01 : AGE on CL
+ 8.20E-01 : WT on V1
+ 1.88E-01 : Proportional error standard deviation
+ 4.76E-01 : Additive error standard deviation
+ 6.20E-01 : CLCR on CL 
 
 [MAIN]
 
-double TVCL =    THETA1;
-double TVV1 =    THETA2;
-double TVQ  =    THETA3;
-double TVV2 =    THETA4;
-double CL_AGE =  THETA5;
-double V1_WT =   THETA6;
-double RUV_PROP =    THETA7;
-double RUV_ADD =    THETA8;
-double CL_CLCR = THETA9;
+double TVCL     = THETA1;
+double TVV1     = THETA2;
+double TVQ      = THETA3;
+double TVV2     = THETA4;
+double CL_AGE   = THETA5;
+double V1_WT    = THETA6;
+double RUV_PROP = THETA7;
+double RUV_ADD  = THETA8;
+double CL_CLCR  = THETA9;
 
-double LOGTWT = log((WT/70)); 
+double LOGTWT = log((WT/70.0)); 
   
-double LOGTAGE = log((AGE/35));
+double LOGTAGE = log((AGE/35.0));
   
-double LOGTCLCR = log((CLCR/83));
+double LOGTCLCR = log((CLCR/83.0));
   
 double MU_1 = log(TVCL) + CL_AGE * LOGTAGE + CL_CLCR * LOGTCLCR;
 
@@ -52,17 +54,17 @@ double Q =  exp(MU_3 +  ETA(3)) ;
 double MU_4 = log(TVV2);
 double V2 =  exp(MU_4 +  ETA(4));
 
-[OMEGA]
-8.84E-02
-9.76E-02
-1.03E-01
-7.26E-02
+[OMEGA] @annotated
+ECL : 8.84E-02 : ETA on CL
+EV1 : 9.76E-02 : ETA on V1
+EQ  : 1.03E-01 : ETA on Q
+EV2 : 7.26E-02 : ETA on V2
 
-[SIGMA]
-1
-      
+[SIGMA] @annotated
+EP : 1 : Not used
+
 [TABLE] 
-capture CP = (CENT/V1);
-double IPRED = CP;
+capture CC = (CENT/V1);
+double IPRED = CC;
 double W = sqrt((RUV_ADD*RUV_ADD)+ (RUV_PROP*RUV_PROP*IPRED*IPRED));
 capture Y = IPRED+W*EPS(1);

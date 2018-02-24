@@ -5,6 +5,7 @@ malaria subject following oral administration of
 fixed-dose azithromycin and chloroquine combination
 tablets
 
+https://malariajournal.biomedcentral.com/articles/10.1186/1475-2875-13-36
 
 [SET] end=10*24, delta=0.1
 
