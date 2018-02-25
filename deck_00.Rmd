@@ -118,6 +118,8 @@ plot(out, L+logV~(time/365), xlab = "Time (year)")
 
 # Orientation
 
+- https://github.com/mrgsolve/learn
+
 - GitHub site: https://github.com/metrumresearchgroup/mrgsolve
 
 - mrgsolve website: https://mrgsolve.github.io
