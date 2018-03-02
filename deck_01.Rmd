@@ -274,7 +274,7 @@ e
 mod %>% ev(amt = 100) %>% mrgsim()
 ```
 
-<blk>Object via pipline</blk>
+<blk>Object via pipeline</blk>
 
 ```{r, eval = FALSE}
 e <- ev(amt = 100)
