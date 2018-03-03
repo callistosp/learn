@@ -50,7 +50,7 @@ double IC50 = exp(log(TVIC50) + EIC50);
 
 NTX_0 = KSYN/KDEG;
 
-F_SC = FSC/(1.0+FSC);
+F_SC = FSC;
 
 [OMEGA] @annotated
 ECL  : 0.0391 : IIV on clearance
