@@ -5,14 +5,13 @@ $PKMODEL cmt = "CENT PERIPH"
 $PARAM
 AGE = 35
 
-$THETA
+//$THETA
 //1.50E+01  1.27E+01  1.52E+01  1.24E+01 -4.47E-01  8.20E-01  1.88E-01  4.76E-01  6.20E-01
-1.5 1.27 1.52 1.24 -0.447 0.82 0.188 0.476 0.620
+//1.5 1.27 1.52 1.24 -0.447 0.82 0.188 0.476 0.620
 
-//$NMXML // NONMEM XML Import
-//run = 1001
-//proj = "C:\Users\Sam\Documents\GitHub\learn\nonmem\meropenem\"
-//proj = "nonmem/meropenem"
+$NMXML // NONMEM XML Import
+run = 1001
+proj = "nonmem/meropenem"
 
 $MAIN 
 double CL = THETA1 * pow(AGE/35, THETA5) * exp(ETA(1));

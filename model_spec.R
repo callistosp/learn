@@ -1,3 +1,5 @@
+# library(mrgsolve)
+devtools::install_github("callistosp/mrgsolve")
 library(mrgsolve)
 library(tidyverse)
 ## load the model file that we have written
@@ -51,6 +53,7 @@ mod <- omat(mod, mat)
 revar(mod)
 
 #################mero model####################
+debug(mrgsolve:::nmxml)
 mod <- mread("mero")
 
 data <- as_data_set(
