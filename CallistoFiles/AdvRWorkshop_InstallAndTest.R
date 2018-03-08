@@ -31,16 +31,7 @@ cat('Sys.setenv(BINPREF = "C:/RBuildTools/3.4/mingw_$(WIN)/bin/")',
 ## test package install
 library(mrgsolve)
 
-code <- '
-$CMT DEPOT CENT
-$PKMODEL ncmt=1, depot=TRUE
-$MAIN
-double CL = 1;
-double V = 20;
-double KA = 1;
-'
-
-mod <- mcode("example",code)
+mod <- mread("pk1", modlib())
 
 ## if output reads "Compiling example ... done.", you are all set!
 ## if not, please consult the GitHub link at the top of the document
