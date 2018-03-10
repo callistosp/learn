@@ -41,18 +41,13 @@ double LOGTAGE = log((AGE/35.0));
   
 double LOGTCLCR = log((CLCR/83.0));
   
-double MU_1 = log(TVCL) + CL_AGE * LOGTAGE + CL_CLCR * LOGTCLCR;
+double CL =  exp(log(TVCL) + CL_AGE * LOGTAGE + CL_CLCR * LOGTCLCR +  ETA(1)) ;
 
-double CL =  exp(MU_1 +  ETA(1)) ;
+double V1 =  exp(log(TVV1) + V1_WT * LOGTWT +  ETA(2)) ;
 
-double MU_2 = log(TVV1) + V1_WT * LOGTWT;
-double V1 =  exp(MU_2 +  ETA(2)) ;
+double Q  =  exp(log(TVQ) +  ETA(3)) ;
 
-double MU_3 = log(TVQ);
-double Q =  exp(MU_3 +  ETA(3)) ;
-
-double MU_4 = log(TVV2);
-double V2 =  exp(MU_4 +  ETA(4));
+double V2 =  exp(log(TVV2 +  ETA(4));
 
 [OMEGA] @annotated
 ECL : 8.84E-02 : ETA on CL
