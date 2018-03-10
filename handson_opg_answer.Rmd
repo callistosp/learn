@@ -69,6 +69,7 @@ etc ... to `TVCL`, `TVVC` etc ...
 ```{r,eval=FALSE}
 head(post)
 
+## tells you what is missing that is expected
 inventory(mod,post)
 ```
 
@@ -90,8 +91,12 @@ There are two specialized functions to help with this:
 - `as_dmat` when the data is in diagonal format
 
 ```{r}
+## put in different matrices for each simulation
 omegas <- as_bmat(post,"OMEGA")
 sigmas <- as_bmat(post,"SIGMA")
+## look at an example of the 1000 matrices
+## omegas[[1]]
+slice(post, 10)
 ```
 
 
@@ -106,6 +111,10 @@ head(sc3)
 We will get the observation design for the simulation 
 through a `tgrid` object
 ```{r}
+## tgrid creates a time grid for you
+# stime(tgrid(0,12,6) + 24)
+
+## end=-1 used to only use addl draw times
 des <- tgrid(end=-1,add=c(0,24*14))
 des
 ```
@@ -125,9 +134,10 @@ Arguments to the function are
 
 ```{r}
 sim <- function(i,data,des) {
-  
+  ## grabs model file from global environment BAD CODING PRACTICE TO DISREGARD SCOPING
   mod %<>% 
     param(slice(post,i)) %>%
+    ## update RE matrices
     omat(omegas[[i]]) %>% 
     smat(sigmas[[i]])
   
@@ -161,7 +171,11 @@ Simulate reps
 options(mc.cores=8)
 mcRNG()
 set.seed(22223)
-out <- mclapply(1:1000, mc.cores = 8, sim, data=sc3,des=des) %>% bind_rows
+## can't use multiple cores on Windows :(
+# out <- mclapply(1:1000, mc.cores = 8, sim, data=sc3,des=des) %>% bind_rows
+out <- lapply(1:1000, sim, data=sc3,des=des) %>% bind_rows
+
+head(out)
 ```
 
 
@@ -195,6 +209,9 @@ summ <-
   filter(time==336) %>%
   group_by(irep) %>%
   summarise(med = median(dDV))
+
+ggplot(summ, aes(x=med)) + 
+  geom_histogram(alpha = 0.4, col="white")
 ```
 
 
@@ -262,4 +279,4 @@ ggplot(sens, aes(TVQ1, med)) +
   geom_smooth(method="loess",col="red",lwd=2)
 
 ```
-
+## this tells us that precise estimates of Q are not necessary to get an accurate estimate of median change from baseline; however, TVVMAX and TVIC50 will definitely impact the estimate of median change 

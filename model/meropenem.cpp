@@ -47,7 +47,7 @@ double V1 =  exp(log(TVV1) + V1_WT * LOGTWT +  ETA(2)) ;
 
 double Q  =  exp(log(TVQ) +  ETA(3)) ;
 
-double V2 =  exp(log(TVV2 +  ETA(4));
+double V2 =  exp(log(TVV2) +  ETA(4));
 
 [OMEGA] @annotated
 ECL : 8.84E-02 : ETA on CL

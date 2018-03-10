@@ -52,7 +52,7 @@ NTX_0 = KSYN/KDEG;
 
 F_SC = FSC;
 
-[OMEGA] @annotated
+[OMEGA] @annotated @name PK
 ECL  : 0.0391 : IIV on clearance
 EVC  : 0.0102 : IIV on VC
 EVP1 : 0.0144 : IIV on VP1
@@ -61,16 +61,16 @@ EQ1  : 0.0379 : IIV on Q1
 EKA  : 0.0457 : IIV on KA
 EFSC : 0.263  : IIV on FSC
 
-[OMEGA] @block @annotated
+[OMEGA] @block @annotated @name PD
 EKSYN : 0.281               : IIV on KSYN
 EKDEG : 0.0867 0.0325       : IIV on KDEG
 EIC50 : 0.0000 0.0000  1.18 : IIV on IC50
   
-[SIGMA] @annotated
+[SIGMA] @annotated @name PKs
 ADDIV : 0.0193 : Additive error IV dose
 ADDSC : 0.7330 : Additive error SC dose
   
-[SIGMA] @annotated
+[SIGMA] @annotated @name PDs
 PDPROP : 0.0407 : Proportional error NTX
 PDADD  :   20.7 : Additive error NTX
 

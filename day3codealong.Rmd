@@ -1,0 +1,81 @@
+---
+title: "Day 3 Codealong"
+author: "Samuel P Callisto"
+date: "March 10, 2018"
+output: html_document
+---
+# Meropenem Model
+## From ddMore repository
+## Based on Li et al. paper
+```{r}
+library(mrgsolve)
+library(tidyverse)
+
+set.seed(9909859)
+
+mod <- mread_cache("meropenem", "model")
+
+revar(mod)
+## fixed EPS to 1 during model creation
+blocks(mod)
+
+# data <- as_data_set(
+#   ev(amt = 1000, rate = 1000/0.5, ID = 1:1000),
+#   ev(amt = 1000, rate = 1000/ 3.0, ID = 1:1000)
+# ) %>%
+#   ## add log-normal random distribution draws for weight
+#   mutate(DUR = amt/rate, WT = rlnorm(n(),log(80), sqrt(0.1)))
+
+data <- as_data_set(
+  ev(amt = 1000, rate = 1000/0.5, ID = 1:30),
+  ev(amt = 1000, rate = 1000/ 3.0, ID = 1:30)
+) %>%
+  ## add log-normal random distribution draws for weight
+  mutate(DUR = amt/rate, WT = rlnorm(n(),log(80), sqrt(0.1)))
+
+## wrapping the simulations to allow summary over 100 simulations
+niter <- 100
+out <- lapply(1:niter, function(i){
+  mod %>%
+  data_set(data) %>%
+  carry_out(DUR) %>%
+  obsonly %>%
+  Req(IPRED = CC) %>% ## model calls IPRED CC, so we can change var name on the fly
+  mrgsim(end = 8, delta = 0.2) %>%
+  mutate(irep = i)
+}) %>% bind_rows
+
+## quick check to see if we have the expected number of patients simulated
+out %>% filter(time ==0) %>% count(DUR)
+
+## calculate the 90% prediction interval
+summ <- 
+  out %>%
+  group_by(DUR, ID, irep) %>%
+  summarize(Cmax = max(IPRED)) %>%
+  group_by(DUR, irep) %>%
+  summarise(med = median(Cmax),
+            lo = quantile(Cmax, 0.05), 
+            hi = quantile(Cmax, 0.95))
+
+## we didn't end up using this approach...
+# summ %>%
+#   group_by(DUR) %>%
+#   ## take the median of each column listed
+#   summarise_at(vars(med, lo, hi), funs(median))
+
+## calculate 95% confidence interval around the 90% prediction interval
+## can only make this statement because we did 100 replicate simulations
+## otherwise we would only be able to calculate the prediction interval
+summ %>% 
+  ## similar to reshape/melt
+  gather(variable, value, c(med, lo, hi)) %>%
+  group_by(DUR, variable) %>%
+  summarise(med = median(value), 
+            lo = quantile(value, 0.025), 
+            hi = quantile(value, 0.975))
+
+## if change the # of IDs simulated to 30, get much wider confidence interval
+## because we don't have as much data to get a precise estimate
+```
+

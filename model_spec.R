@@ -5,6 +5,8 @@ library(tidyverse)
 
 ## load the model file that we have written
 mod <- mread("simple")
+## can update lots of stuff related to the model params and solver instructions
+## mod <- update(mod, maxsteps = 50000)
 omat(mod)
 smat(mod)
 revar(mod)
@@ -15,6 +17,8 @@ revar(mod)
 set.seed(123456)
 mrgsim(mod, events = ev(amt = 100)) %>%
   plot
+## can update on the fly as well
+## mod %>% mrgsim(maxsteps= 50000)
 
 ###############Sensitivity analysis of WT################
 
