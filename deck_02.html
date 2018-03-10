@@ -242,6 +242,8 @@ mod <span class="op">%&gt;%</span><span class="st"> </span>
 <h1><code>ev_rep</code></h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">e &lt;-<span class="st"> </span><span class="kw">ev</span>(<span class="dt">amt =</span> <span class="dv">100</span>, <span class="dt">ii =</span> <span class="dv">12</span>, <span class="dt">addl =</span> <span class="dv">14</span>)
 <span class="kw">ev_rep</span>(e, <span class="dt">id =</span> <span class="kw">seq</span>(<span class="dv">5</span>))</code></pre></div>
+<pre><code>. Warning in ev_rep(e, id = seq(5)): id argument is deprecated; use ID
+. instead</code></pre>
 <pre><code>.   time cmt amt ii addl evid ID
 . 1    0   1 100 12   14    1  1
 . 2    0   1 100 12   14    1  2
@@ -259,6 +261,8 @@ e</code></pre></div>
 . 1    0   1 100    1  0    0
 . 2   36   1  50    1 24    4</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ev_rep</span>(e, <span class="dt">id =</span> <span class="kw">seq</span>(<span class="dv">2</span>))</code></pre></div>
+<pre><code>. Warning in ev_rep(e, id = seq(2)): id argument is deprecated; use ID
+. instead</code></pre>
 <pre><code>.   time cmt amt evid ii addl ID
 . 1    0   1 100    1  0    0  1
 . 2   36   1  50    1 24    4  1
