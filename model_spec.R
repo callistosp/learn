@@ -1,16 +1,18 @@
-# library(mrgsolve)
-devtools::install_github("callistosp/mrgsolve")
+# devtools::install_github("callistosp/mrgsolve")
+# devtools::install_github("metrumresearchgroup/mrgsolve", type="source", force=T)
 library(mrgsolve)
 library(tidyverse)
+
 ## load the model file that we have written
 mod <- mread("simple")
 omat(mod)
+smat(mod)
 revar(mod)
 
 ## reserved words to avoid in model code: 
 ## mrgsolve:::Reserved
 
-set.seed(651)
+set.seed(123456)
 mrgsim(mod, events = ev(amt = 100)) %>%
   plot
 
