@@ -69,6 +69,7 @@ $ODE // DES equivalent in NONMEM
 // otherwise you can define it in MAIN
 // ODE is called every time the solver takes a step
 // MAIN is only called at the beginning of the compilation
+
 dxdt_GUT = -KA*GUT;
 dxdt_CENT = KA*GUT - K*CENT;
 

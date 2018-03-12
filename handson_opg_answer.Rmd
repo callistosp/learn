@@ -68,8 +68,6 @@ We have changed the column names from `THETA1`, `THETA2`
 etc ... to `TVCL`, `TVVC` etc ...
 ```{r,eval=FALSE}
 head(post)
-
-## tells you what is missing that is expected
 inventory(mod,post)
 ```
 
@@ -115,6 +113,7 @@ through a `tgrid` object
 # stime(tgrid(0,12,6) + 24)
 
 ## end=-1 used to only use addl draw times
+
 des <- tgrid(end=-1,add=c(0,24*14))
 des
 ```
