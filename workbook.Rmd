@@ -22,7 +22,7 @@ to explore
 - Review the model code (`see)
 
 ```{r, warm_up_example, eval = FALSE}
-mod <- mread_cache("", modlib())
+mod <- mread_cache("irm1", modlib())
 ```
 
 Extra credit: can you match up the output what what is going 
@@ -63,8 +63,13 @@ Explore this regimen using the following model:
 Simulate out to at least day 14 to see what is happening.
 
 ```{r, z_pak_example, eval = FALSE}
-mod <- mread("", "") %>% zero_re
+mod <- mread("azithro", "model") %>% zero_re
 
+e1 <- ev(amt = 500, ii = 24)
+e2 <- ev(amt = 250, ii = 24, addl = 3)
+dose <- seq(e1,e2)
+
+mod %>% mrgsim(events = dose, end = 24*21) %>% plot()
 ```
 
 ## Output
@@ -123,15 +128,59 @@ doses between 0 and 150 mg
 
 
 ```{r}
+## zero_re() zeroes out the random effects in the model
 mod <- mread_cache("secukinumab", "model") %>% zero_re()
 
-see(mod)
+## check out the model structure
+params(mod)
+blocks(mod)
+init(mod)
+see(mod)     ## [THETA] tells us that time unit is days
 
+## look at change in PASI w/ and w/o dosing
+mrgsim(mod)
+mrgsim(mod, events = ev(amt=100))
+
+
+## look at initial model attempt
 out <- mod %>% ev(amt = 25) %>% mrgsim(end = 35) 
-
 plot(out)
-
 tail(out)
+
+## look at diff events as req by clin pharm
+data <- expand.ev(amt = seq(0,150,5), ii = 7, addl = 4)
+out <- 
+  mod %>%
+  data_set(data) %>%
+  mrgsim(end = 35) %>%
+  filter(time == 35)
+
+# ## two times, so need to use workaround, or mutate...
+# sims <- left_join(out, data, by="ID", 
+#                   suffix = c("", ".y"))
+
+data <- mutate(data, dose=amt)
+out <- 
+  mod %>%
+  data_set(data) %>%
+  carry_out(dose, amt) %>%
+  mrgsim(end = 35) %>%
+  filter(time == 35)
+
+## can also get rid of filter call
+## end=-1 ignores time grid, only simulates time 35 this way, 
+## instead of all times up to 35 also
+out <- 
+  mod %>%
+  data_set(data) %>%
+  carry_out(dose, amt) %>%
+  obsonly() %>%
+  mrgsim(end = -1, add=35) %>%
+  as_data_frame()
+
+ggplot(data = out, aes(dose, dPASI)) +
+  geom_line()
+
 ```
 
 
@@ -290,6 +339,13 @@ out %>% group_by(ddi) %>% summarise(Cmax = max(CP))
 ```
 
 
+<<<<<<< HEAD
+## Next week's project!
+```{r}
+mod <- mread("popex", modlib())
+writeLines(mrgsolve:::code(mod), "mypopex.cpp")
+```
+=======
 ## Sim EBE
 
 ```{r, message = FALSE}
@@ -333,5 +389,6 @@ ggplot(out, aes(TIME,CP, group = ID)) +
   facet_wrap(DUR~DOSE) + geom_line()
 ```
 
+>>>>>>> upstream/master
 
 
