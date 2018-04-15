@@ -61,5 +61,10 @@ EP : 1 : Not used
 [TABLE] 
 capture CC = (CENT/V1);
 double IPRED = CC;
+// why do the Swedes do this? Instead of using epsilon
+// look up Karlsson paper on error partitioning
 double W = sqrt((RUV_ADD*RUV_ADD)+ (RUV_PROP*RUV_PROP*IPRED*IPRED));
 capture Y = IPRED+W*EPS(1);
+// add a variable to correct for negative predictions
+capture YY=Y;
+if(Y < 0)  YY = 0;

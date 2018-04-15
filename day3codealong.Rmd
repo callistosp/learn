@@ -13,18 +13,12 @@ library(tidyverse)
 
 set.seed(9909859)
 
+## with or without .cpp appended to end of model name
 mod <- mread_cache("meropenem", "model")
 
 revar(mod)
 ## fixed EPS to 1 during model creation
 blocks(mod)
-
-# data <- as_data_set(
-#   ev(amt = 1000, rate = 1000/0.5, ID = 1:1000),
-#   ev(amt = 1000, rate = 1000/ 3.0, ID = 1:1000)
-# ) %>%
-#   ## add log-normal random distribution draws for weight
-#   mutate(DUR = amt/rate, WT = rlnorm(n(),log(80), sqrt(0.1)))
 
 data <- as_data_set(
   ev(amt = 1000, rate = 1000/0.5, ID = 1:30),
@@ -33,25 +27,37 @@ data <- as_data_set(
   ## add log-normal random distribution draws for weight
   mutate(DUR = amt/rate, WT = rlnorm(n(),log(80), sqrt(0.1)))
 
+# wt <- cbind(1:30,rlnorm(30,log(80), sqrt(0.1)))
+# names(wt) <- c("ID", "WT")
+# data <- as_data_set(ev(amt = 1000, rate = c(1000/0.5, 1000/3.0), ID = 1:30)) %>%
+#   # group_by(ID) %>%
+#   ## add log-normal random distribution draws for weight
+#   mutate(DUR = amt/rate)
+## this doesn't work; how do we add WT to same patient on multiple lines?
+# left_join(data_frame(data),as.data.frame(wt), by="ID")
+
 ## wrapping the simulations to allow summary over 100 simulations
 niter <- 100
 out <- lapply(1:niter, function(i){
   mod %>%
   data_set(data) %>%
   carry_out(DUR) %>%
-  obsonly %>%
+  obsonly %>% ## pulls ROWS with non-observation events
   Req(IPRED = CC) %>% ## model calls IPRED CC, so we can change var name on the fly
   mrgsim(end = 8, delta = 0.2) %>%
   mutate(irep = i)
-}) %>% bind_rows
+}) %>% bind_rows  ## the output of lapply is a list of data.frames; bindrows will bind them into one data.frames
 
 ## quick check to see if we have the expected number of patients simulated
-out %>% filter(time ==0) %>% count(DUR)
+test <- out %>% filter(time ==0.2) %>% count(DUR)
 
 ## calculate the 90% prediction interval
 summ <- 
   out %>%
   group_by(DUR, ID, irep) %>%
+  ## include DUR to carry along column
+  # group_by(ID) %>%
+  ## groups IDs when calc. Cmax, not accounting for DUR/irep
   summarize(Cmax = max(IPRED)) %>%
   group_by(DUR, irep) %>%
   summarise(med = median(Cmax),
